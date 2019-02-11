@@ -16,10 +16,7 @@
 
 package com.eggwall.SoundSleep;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
+import android.app.*;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
@@ -138,6 +135,18 @@ public class AudioService extends Service implements MediaPlayer.OnErrorListener
         releasePlayer();
         play(mTypePlaying);
         return START_STICKY_COMPATIBILITY;
+
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        Notification notification = new Notification.Builder(this,  NotificationChannel.DEFAULT_CHANNEL_ID)
+                    .setContentTitle(getText(R.string.app_name))
+                    .setContentText(getText(R.string.app_name))
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentIntent(null)
+                    .setTicker(getText(R.string.app_name))
+                    .build();
+            startForeground(NOTIFICATION_ID, notification);
+        }
     }
 
     /**
