@@ -16,12 +16,16 @@
 
 package com.eggwall.SoundSleep;
 
+import android.Manifest;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.*;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.Window;
@@ -235,6 +239,28 @@ public class SleepActivity extends Activity {
         }
         // Ask the service for the current state. It will send a broadcast with the current state.
         sendRequest(AudioService.GET_STATUS);
+
+
+        // Check if we have the right permissions.
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+                /** Do nothing here */
+            }
+                String perms[] = new String[] {Manifest.permission.READ_EXTERNAL_STORAGE};
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(this, perms, 0);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+        }
     }
 
     /**

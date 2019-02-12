@@ -300,6 +300,7 @@ public class AudioService extends Service implements MediaPlayer.OnErrorListener
             Log.e(TAG, "SD card root directory is NOT a directory: " + rootSdLocation);
             return null;
         }
+        Log.d(TAG, "Got the music directory: " + rootSdLocation.getAbsolutePath());
         // Navigate over to the music directory.
         final File musicDir = new File(rootSdLocation, MUSIC_DIR);
         if (!musicDir.isDirectory()) {

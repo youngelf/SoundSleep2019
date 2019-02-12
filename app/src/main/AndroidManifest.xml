@@ -3,6 +3,7 @@
           package="com.eggwall.SoundSleep">
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
