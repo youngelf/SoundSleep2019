@@ -130,23 +130,12 @@ public class AudioService extends Service implements MediaPlayer.OnErrorListener
             stopSelf();
             return START_STICKY_COMPATIBILITY;
         }
+
         // Switch to the other type of music
         mTypePlaying = typeOfResource;
         releasePlayer();
         play(mTypePlaying);
         return START_STICKY_COMPATIBILITY;
-
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-        Notification notification = new Notification.Builder(this,  NotificationChannel.DEFAULT_CHANNEL_ID)
-                    .setContentTitle(getText(R.string.app_name))
-                    .setContentText(getText(R.string.app_name))
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentIntent(null)
-                    .setTicker(getText(R.string.app_name))
-                    .build();
-            startForeground(NOTIFICATION_ID, notification);
-        }
     }
 
     /**
@@ -281,7 +270,7 @@ public class AudioService extends Service implements MediaPlayer.OnErrorListener
         }
         final String[] filenames = mMusicDir.list();
         Log.e(TAG, "All filenames: " + Arrays.toString(filenames));
-        if (filenames.length <= 0) {
+        if (filenames == null || filenames.length <= 0) {
             Log.e(TAG, "Music directory has no files." + mMusicDir);
             return foundNothing;
         }
@@ -352,6 +341,29 @@ public class AudioService extends Service implements MediaPlayer.OnErrorListener
             builder.setContentIntent(pending);
             mNotificationManager.notify(NOTIFICATION_ID, builder.build());
         }
+
+        final Notification notification;
+        if (SDK >= 26) {
+            notification = new Notification.Builder(this, NotificationChannel.DEFAULT_CHANNEL_ID)
+                    .setContentTitle(getText(R.string.app_name))
+                    .setContentText(getText(R.string.app_name))
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setOngoing(true)
+                    .setContentIntent(null)
+                    .build();
+        } else {
+            notification = new Notification.Builder(this)
+                    .setContentTitle(getText(R.string.app_name))
+                    .setContentText(getText(R.string.app_name))
+                    .setContentIntent(pending)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setOngoing(true)
+                    .build();
+
+            mNotificationManager.notify(NOTIFICATION_ID, notification);
+        }
+        startForeground(NOTIFICATION_ID, notification);
+
     }
 
     /**
