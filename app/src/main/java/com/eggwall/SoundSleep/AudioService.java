@@ -25,7 +25,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.support.v4.app.NotificationCompat;
 
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -364,7 +363,6 @@ public class AudioService extends Service implements MediaPlayer.OnErrorListener
             mNotificationManager.notify(NOTIFICATION_ID, notification);
         }
         startForeground(NOTIFICATION_ID, notification);
-
     }
 
     /**

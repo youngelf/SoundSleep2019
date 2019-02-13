@@ -20,7 +20,6 @@ import android.content.*;
 import android.os.SystemClock;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -28,7 +27,7 @@ import java.util.TimeZone;
 /**
  * The implementation of a text clock when the framework doesn't have any.
  */
-public class TextClock extends TextView {
+public class TextClock extends android.support.v7.widget.AppCompatTextView {
     /** True if this view is currently attached to the window. */
     private boolean mAttached = false;
     /** The current time, as displayed. */
