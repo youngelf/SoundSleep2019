@@ -362,6 +362,8 @@ public class AudioService extends Service implements MediaPlayer.OnErrorListener
 
             mNotificationManager.notify(NOTIFICATION_ID, notification);
         }
+        // This isn't showing a notification even on my P device.
+        // TODO: Debug what I'm doing wrong here, and test on old version of Android.
         startForeground(NOTIFICATION_ID, notification);
     }
 

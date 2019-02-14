@@ -252,14 +252,14 @@ public class SleepActivity extends Activity {
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
 
-                /** Do nothing here */
+                /* Do nothing here */
             }
-                String perms[] = new String[] {Manifest.permission.READ_EXTERNAL_STORAGE};
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(this, perms, 0);
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
+            String perms[] = new String[] {Manifest.permission.READ_EXTERNAL_STORAGE};
+            // No explanation needed; request the permission
+            ActivityCompat.requestPermissions(this, perms, 0);
+            // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+            // app-defined int constant. The callback method gets the
+            // result of the request.
         }
     }
 
@@ -276,6 +276,10 @@ public class SleepActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
+    /**
+     * Ask for the location of the clock to be changed in the delay specified here.
+     * @param delay in milliseconds for the next clock location change.
+     */
     private void postClockChange(int delay) {
         mHandler.postDelayed(mChangeClockLocation, delay);
     }
