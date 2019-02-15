@@ -1,4 +1,4 @@
-/**
+/*
  Copyright 2013 Vikram Aggarwal
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -67,7 +67,13 @@ public class SleepActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            mState = AudioService.messageToType.get(action);
+            Integer state = AudioService.messageToType.get(action);
+            if (state != null) {
+                mState = state;
+            } else {
+                // This should never happen, but if it does, assume we were playing silence.
+                mState = AudioService.SILENCE;
+            }
             setIconFromState(mState);
         }
     };
@@ -78,8 +84,8 @@ public class SleepActivity extends Activity {
      *              {@link AudioService#SILENCE} which determines what the {@link AudioService} is currently doing.
      */
     private void setIconFromState(int state) {
-        final ImageView cloud = (ImageView) findViewById(R.id.cloud);
-        final ImageView note = (ImageView) findViewById(R.id.note);
+        final ImageView cloud = findViewById(R.id.cloud);
+        final ImageView note = findViewById(R.id.note);
         switch (state) {
             case AudioService.MUSIC:
                 cloud.setImageResource(R.mipmap.rain);
@@ -246,14 +252,14 @@ public class SleepActivity extends Activity {
                 != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            // if (ActivityCompat.shouldShowRequestPermissionRationale(
+            //        this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
 
                 /* Do nothing here */
-            }
+            // }
             String perms[] = new String[] {Manifest.permission.READ_EXTERNAL_STORAGE};
             // No explanation needed; request the permission
             ActivityCompat.requestPermissions(this, perms, 0);

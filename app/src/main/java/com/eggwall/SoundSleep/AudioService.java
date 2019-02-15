@@ -1,4 +1,4 @@
-/**
+/*
  Copyright 2013 Vikram Aggarwal
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -67,12 +67,14 @@ public class AudioService extends Service implements MediaPlayer.OnErrorListener
     /** Just return the current status without changing any state. */
     public static final int GET_STATUS = 3;
 
+    private static File SLASH = new File("/");
+
     /** Map to perform type -> message lookups */
     public static final String[] typeToMessage = {
             MESSAGE_SILENCE, MESSAGE_MUSIC, MESSAGE_WHITE_NOISE
     };
     /** Map to perform message -> type lookups. */
-    public static final HashMap <String, Integer> messageToType = new HashMap<String, Integer>(3);
+    public static final HashMap <String, Integer> messageToType = new HashMap<>(3);
     static {
         messageToType.put(MESSAGE_SILENCE, SILENCE);
         messageToType.put(MESSAGE_MUSIC, MUSIC);
@@ -264,7 +266,7 @@ public class AudioService extends Service implements MediaPlayer.OnErrorListener
         // What we return when we don't find anything. It is safer to return a zero length array than null.
         final String[] foundNothing = new String[0];
         // Still nothing? We don't have a valid music directory.
-        if (mMusicDir == null) {
+        if (mMusicDir == SLASH) {
             return foundNothing;
         }
         final String[] filenames = mMusicDir.list();
@@ -279,14 +281,17 @@ public class AudioService extends Service implements MediaPlayer.OnErrorListener
     /**
      * Returns the location of the music directory which is
      * [sdcard]/music/sleeping.
-     * @return the file representing the music directory.
+     * @return the file representing the music directory. Returns the root directory if no
+     *          music directory was found.
      */
     private static File getMusicDir() {
         final String state = Environment.getExternalStorageState();
+
+        // Linux system, so root always exists, but it might not be readable.
         if (!Environment.MEDIA_MOUNTED.equals(state)) {
             // If we don't have an SD card, cannot do anything here.
             Log.e(TAG, "SD card root directory is not available");
-            return null;
+            return SLASH;
         }
         final File rootSdLocation;
         if (SDK >= 8) {
@@ -296,15 +301,15 @@ public class AudioService extends Service implements MediaPlayer.OnErrorListener
         }
         if (rootSdLocation == null) {
             // Not a directory? Completely unexpected.
-            Log.e(TAG, "SD card root directory is NOT a directory: " + rootSdLocation);
-            return null;
+            Log.e(TAG, "SD card root directory is NULL");
+            return SLASH;
         }
         Log.d(TAG, "Got the music directory: " + rootSdLocation.getAbsolutePath());
         // Navigate over to the music directory.
         final File musicDir = new File(rootSdLocation, MUSIC_DIR);
         if (!musicDir.isDirectory()) {
             Log.e(TAG, "Music directory does not exist." + rootSdLocation);
-            return null;
+            return SLASH;
         }
         return musicDir;
     }
